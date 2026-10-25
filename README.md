@@ -133,3 +133,24 @@ grafana/dashboards/         the dashboard JSON
 scripts/load.sh             traffic generator for the demo
 docker-compose.yml          the whole stack
 ```
+
+## A note on the security settings
+
+This stack is built to run on a laptop and be demoed in class, and a few settings
+are deliberately relaxed for that. They are fine on `localhost` and would all need
+changing before anything like this went further:
+
+* **Grafana** ships with the default `admin` / `admin` login and anonymous access
+  enabled, so the demo needs no sign-in. The anonymous role is `Editor` rather than
+  `Admin` — the lowest role that can still follow a log line's trace link into
+  Explore. For any real deployment: anonymous off (or `Viewer`), and a real password
+  from a secret rather than the compose file.
+* **Loki** runs with `auth_enabled: false`, which is the normal single-tenant setup
+  and the reason no `X-Scope-OrgID` header is needed anywhere. Port 3100 is published
+  only so the API can be poked with `curl` during the demo; Grafana and the collector
+  reach it over the internal Docker network and would not need it exposed.
+* **Task titles are written into span attributes and log lines** (`task.title`). That
+  is intentional here — it is what makes the spans worth looking at — but in a real
+  service, free-text user input does not belong in telemetry that gets shipped to a
+  logging backend and kept around. There you would log the id only, or redact the
+  title first.

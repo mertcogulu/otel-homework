@@ -73,10 +73,13 @@ services:
   grafana:
     image: grafana/grafana:11.3.0
     environment:
+      # demo credentials only - this stack is meant to run on localhost
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
+      # anonymous access so the demo needs no login; Editor (not Admin) is
+      # the least role that can still open Explore from a log line's trace link
       GF_AUTH_ANONYMOUS_ENABLED: "true"
-      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Editor
       GF_USERS_DEFAULT_THEME: dark
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
