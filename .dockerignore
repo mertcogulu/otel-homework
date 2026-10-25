@@ -1,0 +1,11 @@
+.venv
+.git
+.idea
+__pycache__
+*.pyc
+grafana
+prometheus
+loki
+otel
+scripts
+README.md
